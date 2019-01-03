@@ -10,6 +10,13 @@ typedef struct {
 	float z;
 } Vec3;
 
+typedef struct {
+	float x;
+	float y;
+	float z;
+} Vec2;
+
+
 
 extern GLfloat vector_len(Vec3 v);
 

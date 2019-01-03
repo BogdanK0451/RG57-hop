@@ -6,8 +6,7 @@
 #include "vecops.h"
 
 
-#define PI 3.141592
-
+#define PI 3.1415926
 
 
 typedef struct {
@@ -25,8 +24,6 @@ extern Vec3 normCamDir;
 extern void adjust_camera();
 
 extern void rot_cam(GLfloat pitch, GLfloat yaw);
-
-extern void rot_x(GLfloat angle);
 
 extern void mov_forw(GLfloat distance);
 

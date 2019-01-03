@@ -9,37 +9,30 @@
 
 #include "input.h"
 #include "camera.h"
+#include "loader.h"
 
 
 #define TIMER_ID 0
 #define TIMER_INTERVAL 16.66
-#define WINDOW_WIDTH 1280
-#define WINDOW_HEIGHT 800
-
-typedef struct vertexes {
-	float x;
-	float y;
-	float z;
-} Model;
+#define WINDOW_WIDTH 1650
+#define WINDOW_HEIGHT 1050
 
 
 int windowWidth, windowHeight;
 
 float angle = 0;
 
-Model vxs[13900];
-float faces[302][6];
+
 
 void on_reshape(int width, int height);
 void on_display(void);
 void on_timer(int value);
 
-void load_model(char* path);
-
 void let_there_be_light();
 void draw_ui();
 void generate_gallery();
 void generate_spinning_cube();
+
 
 
 
@@ -58,24 +51,28 @@ int main(int argc, char *argv[])
 	glutInitWindowPosition(100, 0);
 	glutCreateWindow("Hop");
 
+	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_DEPTH_TEST);
 	glutSetCursor(GLUT_CURSOR_NONE);
 
 
-	let_there_be_light();
+
 
 
 	//registracija funkcija za dogadjaje
-	glutSpecialFunc(on_special_keyboard_in);
+	glutSpecialFunc(on_special_keyboard_down);
+	glutSpecialUpFunc(on_special_keyboard_up);
 	glutKeyboardFunc(on_keyboard);
+	glutKeyboardUpFunc(on_keyboard_up);
 	glutReshapeFunc(on_reshape);
 	glutDisplayFunc(on_display);
 	glutPassiveMotionFunc(on_mouse_mov);
-
+	
+	let_there_be_light();
+	load_model("resources/Stormtrooper.obj");
 	
 	glutTimerFunc(TIMER_INTERVAL, on_timer, TIMER_ID);
 
-	load_model("src/Text.obj");
 
 	/*petlja koja slusa i poziva metode za dogadjaje*/
 	glutMainLoop();
@@ -90,7 +87,9 @@ void on_timer(int value) {
 		return;
 
 	angle = angle + 1;
+	rot_cam(pitch, yaw);
 
+	call_movement_func();
 	glutPostRedisplay();
 
 	//if (animation_ongoing)
@@ -117,7 +116,7 @@ void on_display(void)
 	gluPerspective(
 		75,
 		windowWidth / (float)windowHeight,
-		1, 100);
+		1, 1000);
 
 
 	glMatrixMode(GL_MODELVIEW);
@@ -129,19 +128,15 @@ void on_display(void)
 	glColor3f(0.5, 0.5, 0.5);
 	//generate_gallery();
 	glPushMatrix();
-	glScalef(20, 20, 20);
-	glRotatef(angle, 0, 1, 0);
+	glScalef(1,1,1);
+//	glRotatef(angle, 0, 1, 0);
 	glPointSize(3);
-	glPolygonMode(GL_FRONT_AND_BACK, GL_POINT);
-	for (int j = 0; j < 13900; j = j + 1) {
-		glBegin(GL_TRIANGLES);
-		glVertex3f(vxs[j].x, vxs[j].y, vxs[j].z);
-		glVertex3f(vxs[j + 1].x, vxs[j + 1].y, vxs[j + 1].z);
-		glVertex3f(vxs[j + 2].x, vxs[j + 2].y, vxs[j + 2].z);
+	glPolygonMode(GL_FRONT, GL_FILL);
+	
+	draw_loaded_obj();
 
-	//printf("%f %f %f\n %f %f %f \n %f %f %f\n",vxs[j].x,vxs[j].y,vxs[j].z,vxs[j+1].x,vxs[j+1].y,vxs[j+1].z,vxs[j+2].x,vxs[j+2].y,vxs[j+2].z);
-		glEnd();
-	}
+
+
 	glPopMatrix();
 
 	glLineWidth(3);
@@ -183,31 +178,6 @@ void generate_plank(int length) {
 
 }
 
-void load_model(char* path) {
-
-	FILE * model = fopen(path, "r");
-
-	if (model == NULL) {
-		fprintf(stderr, " Error opening file: %s\n", strerror(errno));
-		exit(EXIT_FAILURE);
-	}
-	int i = 0;
-
-	while (1) {
-		char buf[128];
-
-	//	int v1 = fscanf(model, "%s", buf);
-		
-
-		if (fgets(buf, 128, model)==NULL)
-			break;
-		if (buf[0] == 'v' && (buf[1] != 't' && buf[1] != 'n')) {
-			sscanf(buf, "%*s %f %f %f", &vxs[i].x, &vxs[i].y, &vxs[i].z);
-			//printf("%f",vxs[i].x);
-			i = i + 1;
-		}
-	}
-}
 
 void generateArena() 
 {
@@ -261,7 +231,7 @@ void draw_ui()
 	glLineWidth(1.0);
 	glPointSize(2);
 	
-
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 
 	//iscrtavanje kruznog nisana sa tackom u centru
 	glBegin(GL_POINTS);
@@ -287,31 +257,31 @@ void draw_ui()
 void let_there_be_light() {
 
 	/* Pozicija svetla (u pitanju je direkcionalno svetlo). */
-	GLfloat light_position[] = { 1.0f, 1.0f, 1.0f, 0.0f };
+	GLfloat light_position[] = { 100.0f, 100.0f, 100.0f, 0.0f };
 
 	/* Ambijentalna boja svetla. */
-	GLfloat light_ambient[] = { 0.0f, 0.0f, 0.7f, 1.0f };
+	GLfloat light_ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
 
 	/* Difuzna boja svetla. */
-	GLfloat light_diffuse[] = { 0.7f, 0.7f, 0.7f, 1.0f };
+	GLfloat light_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0f };
 
 	/* Spekularna boja svetla. */
-	GLfloat light_specular[] = { 0.9f, 0.9f, 0.9f, 1.0f };
+	GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	/* Koeficijenti ambijentalne refleksije materijala. */
-	GLfloat ambient_coeffs[] = { 1.0f, 0.1f, 0.1f, 1.0f };
+	GLfloat ambient_coeffs[] = { 0.3f, 0.3f, 0.3f, 1.0f };
 
 	/* Koeficijenti difuzne refleksije materijala. */
-	GLfloat diffuse_coeffs[] = { 0.0f, 0.0f, 0.8f, 1.0f };
+	GLfloat diffuse_coeffs[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	/* Koeficijenti spekularne refleksije materijala. */
 	GLfloat specular_coeffs[] = { 1.0f, 1.0f, 1.0f, 1.0f };
 
 	/* Koeficijent glatkosti materijala. */
-	GLfloat shininess = 20;
+	GLfloat shininess = 0;
 
-	//glEnable(GL_LIGHTING);
-	//glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
 
 	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
 	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
@@ -326,17 +296,11 @@ void let_there_be_light() {
 
 }
 
+
+
 // glPolygonMode(face ,fill lines points);
 // glClipPlane(GL_CLIP_PLANE0,clip_plane);
 // 	glEnable(GL_CLIP_PLANE0);
 //glEnable(GL_COLOR_MATERIAL);
 //glColorMaterial(frontback,ambient diffuse etc);
 
-
-
-/*
-		glutSolidSphere(0.5,20,20);
-		GLUquadric * qobj;
-		qobj= gluNewQuadric();
-		gluQuadricNormals(qobj, GLU_SMOOTH);
-		gluCylinder(qobj,0.5,1,1,20,20);*/
