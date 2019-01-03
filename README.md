@@ -4,7 +4,7 @@ Upravljanje kamerom misem i na strelice.
 Fullscreen F12. 
 Escape za kraj programa.
 
-Od spoljasnjih resursa su koriscene biblioteke
+Od spoljasnjih resursa su koriscene biblioteke:
 
 Za kratke regex-e: https://github.com/kokke/tiny-regex-c
 
