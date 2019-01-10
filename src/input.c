@@ -5,8 +5,14 @@
 #include "input.h"
 #include "camera.h"
 #include "loader.h"
+#include "collision.h"
+#include "draw.h"
 #define WINDOW_WIDTH 1650
 #define WINDOW_HEIGHT 1050
+
+#define ESC 27
+#define SPACE 32
+#define MOVEMENT_SPEED 0.2f
 
 
 float lastX = WINDOW_WIDTH / 2;
@@ -22,24 +28,41 @@ static int KEY_A = 0;
 static int KEY_S = 0;
 static int KEY_D = 0;
 static int KEY_SPACE = 0;
-static int KEY_F11 = 0;
+static int FULLSCREEN = 0;
 static int LEFT_ARROW = 0;
 static int RIGHT_ARROW = 0;
 static int UP_ARROW = 0;
 static int DOWN_ARROW = 0;
 
+
+static int NO_CLIP = 0;
+int SHOW_BOUNDARIES = 0;
+
+//400 speed
+
+
+//implement 
+static int ARENA_VIEW = 0;
+
+//implement float
+float gravityIntensity = 0;
+
 void call_movement_func()
 {
+	if (NO_CLIP)
+		mov_up(-0.3f);
 	if (KEY_W)
-		mov_forw(0.25f);
+		mov_forw(MOVEMENT_SPEED);
 	if (KEY_S)
-		mov_forw(-0.25f);
+		mov_forw(-MOVEMENT_SPEED);
 	if (KEY_A)
-		mov_right(-0.25f);
+		mov_right(-MOVEMENT_SPEED);
 	if (KEY_D)
-		mov_right(0.25f);
+		mov_right(MOVEMENT_SPEED);
+
 	if (KEY_SPACE)
-		mov_up(0.25f);
+		mov_up(MOVEMENT_SPEED);
+	
 	if(UP_ARROW)
 		rot_cam(pitch, yaw);
 	if(DOWN_ARROW)
@@ -62,15 +85,19 @@ void check_if_pitch_89()
 
 void on_keyboard(unsigned char key, int x, int y)
 {
+	
+
 	switch (key) 
 	{
-	case 27:
-
-		//oslobadanje alocirane memorije
-		free(v);
-		free(vt);
-		free(vn);
-		free(faces);
+	case ESC:
+		//oslobadanje alocirane memorije za objekte
+		for (int i = 0; i < objNum; i++)
+		{
+			free(obj[i].v);
+			free(obj[i].vt);
+			free(obj[i].vn);
+			free(obj[i].faces);
+		}
 		exit(EXIT_SUCCESS);
 		break;
 	case 'W':
@@ -89,12 +116,10 @@ void on_keyboard(unsigned char key, int x, int y)
 	case 'a':
 		KEY_A = 1;
 		break;
-	case 32:
+	case SPACE:
 		KEY_SPACE = 1;
 		break;
 	}
-	
-
 }
 
 void on_keyboard_up(unsigned char key, int x, int y) 
@@ -117,7 +142,7 @@ void on_keyboard_up(unsigned char key, int x, int y)
 	case 'a':
 		KEY_A = 0;
 		break;
-	case 32:
+	case SPACE:
 		KEY_SPACE = 0;
 		break;
 	}
@@ -159,7 +184,7 @@ void on_mouse_mov(int xPos, int yPos)
 }
 
 
-void on_special_keyboard_down(int key, int x, int y)
+void on_special_keyboard(int key, int x, int y)
 {
 	switch (key)
 	{
@@ -172,25 +197,44 @@ void on_special_keyboard_down(int key, int x, int y)
 		LEFT_ARROW = 1;
 		break;
 	case GLUT_KEY_UP:
-		pitch += 5.f;
+		pitch += -5.f;
 		check_if_pitch_89();
 		UP_ARROW = 1;
 		break;
 	case GLUT_KEY_DOWN:
-		pitch += -5.f;
+		pitch += 5.f;
 		check_if_pitch_89();
 		DOWN_ARROW = 1;
 		break;
 	case GLUT_KEY_F11:
-		if (!KEY_F11)
+		if (!FULLSCREEN)
 		{
 			glutFullScreen();
-			KEY_F11 = 1;
+			FULLSCREEN = 1;
 		}
 		else {
 			glutPositionWindow(100, 0);
-			KEY_F11 = 0;
+			FULLSCREEN = 0;
 		}
+		break;
+	case GLUT_KEY_F10:
+		if (!NO_CLIP)
+		{
+			NO_CLIP = 1;
+		}
+		else {
+			NO_CLIP = 0;
+		}
+		break;
+	case GLUT_KEY_F9:
+		if (!SHOW_BOUNDARIES)
+		{
+			SHOW_BOUNDARIES = 1;
+		}
+		else {
+			SHOW_BOUNDARIES = 0;
+		}
+		break;
 	}
 }
 void on_special_keyboard_up(int key, int x, int y)

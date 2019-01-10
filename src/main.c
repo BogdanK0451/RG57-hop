@@ -10,12 +10,16 @@
 #include "input.h"
 #include "camera.h"
 #include "loader.h"
+#include "collision.h"
+#include "draw.h"
 
 
 #define TIMER_ID 0
 #define TIMER_INTERVAL 16.66
 #define WINDOW_WIDTH 1650
 #define WINDOW_HEIGHT 1050
+#define NEAR_PLANE 1
+#define FAR_PLANE 1024
 
 
 int windowWidth, windowHeight;
@@ -30,15 +34,6 @@ void on_timer(int value);
 
 void let_there_be_light();
 void draw_ui();
-void generate_gallery();
-void generate_spinning_cube();
-
-
-
-
-void generate_plank(int length);
-
-
 
 
 int main(int argc, char *argv[])
@@ -60,7 +55,7 @@ int main(int argc, char *argv[])
 
 
 	//registracija funkcija za dogadjaje
-	glutSpecialFunc(on_special_keyboard_down);
+	glutSpecialFunc(on_special_keyboard);
 	glutSpecialUpFunc(on_special_keyboard_up);
 	glutKeyboardFunc(on_keyboard);
 	glutKeyboardUpFunc(on_keyboard_up);
@@ -69,7 +64,8 @@ int main(int argc, char *argv[])
 	glutPassiveMotionFunc(on_mouse_mov);
 	
 	let_there_be_light();
-	load_model("resources/Stormtrooper.obj");
+	load_all_files();
+
 	
 	glutTimerFunc(TIMER_INTERVAL, on_timer, TIMER_ID);
 
@@ -82,14 +78,17 @@ int main(int argc, char *argv[])
 
 
 
-void on_timer(int value) {
+void on_timer(int value)
+{
 	if (value != TIMER_ID)
 		return;
 
+
+
 	angle = angle + 1;
 	rot_cam(pitch, yaw);
-
 	call_movement_func();
+
 	glutPostRedisplay();
 
 	//if (animation_ongoing)
@@ -109,6 +108,7 @@ void on_display(void)
 	glClearColor(0.75f, 0.75f, 0.75f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+
 	glViewport(0, 0, windowWidth, windowHeight);
 
 	glMatrixMode(GL_PROJECTION);
@@ -116,25 +116,20 @@ void on_display(void)
 	gluPerspective(
 		75,
 		windowWidth / (float)windowHeight,
-		1, 1000);
+		NEAR_PLANE, FAR_PLANE);
 
 
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
 	adjust_camera();
 	
-	//generate_plank(1);
-
 	glColor3f(0.5, 0.5, 0.5);
-	//generate_gallery();
 	glPushMatrix();
-	glScalef(1,1,1);
 //	glRotatef(angle, 0, 1, 0);
 	glPointSize(3);
-	glPolygonMode(GL_FRONT, GL_FILL);
-	
-	draw_loaded_obj();
 
+	draw_loaded_obj();
+	
 
 
 	glPopMatrix();
@@ -159,59 +154,7 @@ void on_display(void)
 	//postavljamo matricu projekcije na ortogonalnu i iscrtavamo ui elemente
 	draw_ui();
 
-
 	glutSwapBuffers();
-}
-
-void generate_plank(int length) {
-	for (int i = 0; i < length; i++) {
-		glColor3f(0, 1, 1);
-		glutSolidCube(2);
-		glPushMatrix();
-		glColor3f(1, 1, 0);
-		glTranslatef(0, 0, 2);
-		glutSolidCube(2);
-		glPopMatrix();
-		glTranslatef(2, 0, 0);
-	}
-
-
-}
-
-
-void generateArena() 
-{
-}
-
-void generate_gallery()
-{
-	generate_spinning_cube();
-
-}
-
-
-void generate_spinning_cube() {
-
-	glPushMatrix();
-	glTranslatef(0, 0, 1);
-	glRotatef(angle, 1, 0, 0);
-
-	glLineWidth(1);
-	glBegin(GL_LINES);
-		glColor3f(1, 0, 0);
-		glVertex3f(0, 0, 0);
-		glVertex3f(100, 0, 0);
-
-		glColor3f(0, 1, 0);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, 100, 0);
-
-		glColor3f(0, 0, 1);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, 0, 100);
-	glEnd();
-
-	glPopMatrix();
 }
 
 

@@ -14,7 +14,11 @@ typedef struct {
 	Vec3 dir;
 	Vec3 upVec;
 	Vec3 rVec;
+	float width;
+	float height;
+	float depth;
 }Camera;
+
 
 extern Vec3 viewPoint;
 extern Camera cam;

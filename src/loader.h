@@ -1,24 +1,34 @@
 #ifndef LOADER_H 
 #define LOADER_H
-
 #include "vecops.h"
 
+typedef struct {
+	GLuint id;
+	char name[40];
+}Texture;
 
 typedef struct {
-	int indexV;
-	int indexVt;
-	int indexVn;
-}Faces;
+	char *modelPath;
+	int modelCount;
+}ModelPaths;
 
+extern ModelPaths modelPaths[];
+extern char *skyboxPaths[];
 
-extern Vec3 *v;		/*Obj file info https://www.fileformat.info/format/wavefrontobj/egff.htm */
-extern Vec2 *vt;
-extern Vec3 *vn;
-extern Faces *faces;
+extern Texture tex[];
 
-extern void load_model(char* path);
+extern GLuint skybox[];
 
-extern void draw_loaded_obj();
+extern int texNum;
+
+extern void load_skybox(char **path);
+
+extern void load_models(ModelPaths *modelPaths,char *mapPath);
+
+extern void load_texture(char *path);
+
+extern void load_all_files();
+
 
 
 #endif
