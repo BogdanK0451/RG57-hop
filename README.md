@@ -9,8 +9,8 @@ F9  Iscrtavanje bounding boxova
 F8 Visestruki viewportovi
 
 WASD kretanje i dijagonalno kretanje
- ^
-‹ˇ› rotacija kamere
+ 
+Strelice rotacija kamere
 
 C cucanje
 
