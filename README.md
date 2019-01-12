@@ -38,8 +38,6 @@ U suprotnom ce mis imati ogroman sensitivity i jedina opcija ce biti kretanje ka
 
 Ukoliko se igrac krece brzinom koja je veca od dimenzija objekta nece doci do kolizije.
 
-Pri koliziji igraс ne "slide-uje" uz zid.
-
 Dijagonalna brzina kretanja veca od brzine kretanja pri drzanju samo W ili A ili S ili D.
 
 ## Spoljasni resursi
@@ -49,3 +47,10 @@ koriscene su biblioteke:
 Za kratke regex-e: https://github.com/kokke/tiny-regex-c
 
 Za ucitavanje tekstura: https://github.com/nothings/stb/blob/master/stb_image.h
+
+
+## Pozeljno implementirati
+
+Ubrzanje, usporenje kod dash kretanja.
+
+Pri koliziji treba da "slide-uje" uz zid.
