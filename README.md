@@ -3,20 +3,23 @@
 
 ## Kontrole
 
-F11 Fullscreen
-F10 No clip mod
-F9  Iscrtavanje bounding boxova
-F8 Visestruki viewportovi
+F11 - Fullscreen
 
-WASD kretanje i dijagonalno kretanje
+F10 - No clip mod
+
+F9 - Iscrtavanje bounding boxova
+
+F8 - Visestruki viewportovi
+
+WASD - kretanje i dijagonalno kretanje
  
-Strelice rotacija kamere
+Strelice - rotacija kamere
 
-C cucanje
+C - cucanje
 
-Space skok
+Space - skok
 
-Escape za kraj programa
+Escape - kraj programa
 
 ## Setup
 Da bi pomeranje kamere misem radilo normalno, program mora da se pokrene sa VMWWARE Workstation-a ili native (ne Virtual box i ne Vmware Player) i u njemu treba da se podesi edit>preferences>input>optimize mouse for games> always.
