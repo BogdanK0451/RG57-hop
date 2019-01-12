@@ -11,6 +11,8 @@ F9 - Iscrtavanje bounding boxova
 
 F8 - Visestruki viewportovi
 
+F7 - Restart
+
 WASD - kretanje i dijagonalno kretanje
  
 Strelice - rotacija kamere
