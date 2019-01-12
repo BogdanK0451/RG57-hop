@@ -22,7 +22,14 @@ Space - skok
 Escape - kraj programa
 
 ## Setup
-Da bi pomeranje kamere misem radilo normalno, program mora da se pokrene sa VMWWARE Workstation-a ili native (ne Virtual box i ne Vmware Player) i u njemu treba da se podesi edit>preferences>input>optimize mouse for games> always.
+
+Instalirati gcc, make i glut
+
+sudo apt install gcc
+sudo apt install make
+sudo apt-get install binutils-gold freeglut3 freeglut3-dev 
+
+Da bi pomeranje kamere misem radilo normalno, program mora da se pokrene sa VMWWARE Workstation Pro-a ili native Ubuntu (ne Virtual box i ne Vmware Player) i u njemu (VMWARE Workstation pro-u) treba da se podesi edit>preferences>input>optimize mouse for games> always.
 U suprotnom ce mis imati ogroman sensitivity i jedina opcija ce biti kretanje kamere na strelice.
 
 ## Poznati problemi
