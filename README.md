@@ -31,7 +31,7 @@ Ukoliko se igrac krece brzinom koja je veca od dimenzija objekta nece doci do ko
 
 Pri koliziji igraс ne "slide-uje" uz zid.
 
-Dijagonalna brzina kretanja veca od vertikalne i horizontalne.
+Dijagonalna brzina kretanja veca od brzine kretanja pri drzanju samo W ili A ili S ili D.
 
 ## Spoljasni resursi
 
