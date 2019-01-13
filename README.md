@@ -3,15 +3,15 @@
 
 ## Kontrole
 
-F11 - Fullscreen
+F11 - fullscreen
 
-F10 - No clip mod
+F10 - no clip mod
 
-F9 - Iscrtavanje bounding boxova
+F9 - iscrtavanje bounding boxova
 
-F8 - Visestruki viewportovi
+F8 - visestruki viewportovi
 
-F7 - Restart
+F7 - restart
 
 WASD - kretanje i dijagonalno kretanje
  
@@ -20,6 +20,14 @@ Strelice - rotacija kamere
 C - cucanje
 
 Space - skok
+
+E - pull ka objektu
+
+T - teleport
+
+Middle mouse + WASD - dash
+
+Desni klik - zoom
 
 Escape - kraj programa
 
@@ -52,5 +60,7 @@ Za ucitavanje tekstura: https://github.com/nothings/stb/blob/master/stb_image.h
 ## Pozeljno implementirati
 
 Ubrzanje, usporenje kod dash kretanja.
+
+Dinamicki skybox.
 
 Pri koliziji treba da "slide-uje" uz zid.
