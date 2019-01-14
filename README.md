@@ -11,7 +11,9 @@ F9 - iscrtavanje bounding boxova
 
 F8 - visestruki viewportovi
 
-F7 - restart
+F7 - textureless mode
+
+F5 - restart
 
 WASD - kretanje i dijagonalno kretanje
  
@@ -47,6 +49,8 @@ U suprotnom ce mis imati ogroman sensitivity i jedina opcija ce biti kretanje ka
 Ukoliko se igrac krece brzinom koja je veca od dimenzija objekta nece doci do kolizije.
 
 Dijagonalna brzina kretanja veca od brzine kretanja pri drzanju samo W ili A ili S ili D.
+
+Na ulaznim blockovima u belu "kucu" ne dolazi do bojenja blockova prilikom kolizije
 
 ## Spoljasni resursi
 
