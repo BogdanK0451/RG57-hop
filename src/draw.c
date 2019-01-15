@@ -375,6 +375,7 @@ void draw_ui(int windowWidth, int windowHeight)
 	}
 	glEnable(GL_LIGHTING);
 	glPopMatrix();
+	glLineWidth(2);
 }
 
 void draw_coordinate_system()
