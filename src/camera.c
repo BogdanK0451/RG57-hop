@@ -11,7 +11,7 @@ Camera cam = {{7.0f,7.0f,7.0f},  // pozicija kamere
 			  {0.0f,0.0f,1.0f},	// vektor pravca u koji se gleda
 			  {0.0f,1.0f,0.0f},	// upvector
 			  {1.0f,0.0f,0.0f},	// rightvector
-			  0.5f,3.5f,0.5f,	 //visina,sirina,dubina igraca
+			  0.5f,3.0f,0.5f,	 //visina,sirina,dubina igraca
 			  1.0f,0.0f,0,		//multiplier brzine,brzina pri skoku, kamera na zemlji
 			  0,0,180,			//crouch, cooldown, power charge
 			  100,75			//health,fov
