@@ -47,8 +47,9 @@ Crveni krug oko nisana govori da je je teleport i blink na cooldown-u od 5 sek
 
 ## Setup
 
-Instalirati gcc, make i glut
+Za ubuntu:
 
+Instalirati gcc, make i glut
 sudo apt install gcc
 sudo apt install make
 sudo apt-get install binutils-gold freeglut3 freeglut3-dev 
@@ -58,6 +59,15 @@ U suprotnom ce mis imati ogroman sensitivity i jedina opcija ce biti kretanje ka
 
 **Iz nekog razloga na mojoj virtuelnoj masini kod programa postoje artifakti kada se scena iscrtava u rezimu GL_LINES
 mozda na vasoj tog problema nece biti. Na windowsu tog artifakta nema**
+
+Za windows:
+Na windowsu se program moze pokrenuti ili otvoriti kroz Visual Studio ukoliko su dostupni **glut i glew**
+tutorijal za "instalaciju"
+
+https://www.youtube.com/watch?v=8p76pJsUP44
+
+Struktura direktorijuma programa je malo drugacija, za kompajliranju na windows-u iskoristiti program koji sam stavio u
+OpenGL.rar
 
 ## Poznati problemi
 
