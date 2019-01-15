@@ -61,6 +61,7 @@ U suprotnom ce mis imati ogroman sensitivity i jedina opcija ce biti kretanje ka
 mozda na vasoj tog problema nece biti. Na windowsu tog artifakta nema**
 
 Za windows:
+
 Na windowsu se program moze pokrenuti ili otvoriti kroz Visual Studio ukoliko su dostupni **glut i glew**
 tutorijal za "instalaciju"
 
