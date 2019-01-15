@@ -1,6 +1,4 @@
-
 #include <GL/glut.h>
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
@@ -15,26 +13,22 @@
 
 
 #define TIMER_ID 0
-#define TIMER_INTERVAL 16.66
-#define WINDOW_WIDTH 1650
-#define WINDOW_HEIGHT 1050
-#define NEAR_PLANE 1
+#define TIMER_INTERVAL 16
+#define NEAR_PLANE 0.1f
 #define FAR_PLANE 1024
 
 
 int windowWidth, windowHeight;
 
-float angle = 0;
-
-
+float angle = 0.0f;
+int seconds = 0;
+extern int tick = 0;
 
 void on_reshape(int width, int height);
 void on_display(void);
 void on_timer(int value);
-
-void let_there_be_light();
-void draw_ui();
-
+void set_scene();
+void set_callbacks();
 
 int main(int argc, char *argv[])
 {
@@ -48,29 +42,20 @@ int main(int argc, char *argv[])
 
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_LIGHTING);
+	for (int i = 0; i < MAX_LIGHTS; i++) 
+			glEnable(lights[i]);
+
 	glutSetCursor(GLUT_CURSOR_NONE);
 
-
-
-
-
 	//registracija funkcija za dogadjaje
-	glutSpecialFunc(on_special_keyboard);
-	glutSpecialUpFunc(on_special_keyboard_up);
-	glutKeyboardFunc(on_keyboard);
-	glutKeyboardUpFunc(on_keyboard_up);
-	glutReshapeFunc(on_reshape);
-	glutDisplayFunc(on_display);
-	glutPassiveMotionFunc(on_mouse_mov);
+	set_callbacks();
 	
-	let_there_be_light();
+	//ucitavanje mape modela i tekstura
 	load_all_files();
 
-	
 	glutTimerFunc(TIMER_INTERVAL, on_timer, TIMER_ID);
 
-
-	/*petlja koja slusa i poziva metode za dogadjaje*/
 	glutMainLoop();
 
 	return 0;
@@ -83,22 +68,48 @@ void on_timer(int value)
 	if (value != TIMER_ID)
 		return;
 
+	tick++;
+	/*svake sekunde smanjujemo cooldown na kretanja teleport i blink*/
+	if (tick % 60 == 0)
+	{
+		seconds++;
+		if(cam.spellCooldown>0)
+			cam.spellCooldown--;
+	}
+	/*svakih 10 sekundi dajemo igracu 1 sekundu koriscenja jetPack kretanja*/
+	if (tick % 600 == 0)
+		if(cam.powerCharge<120)
+			cam.powerCharge += 60;
 
+	angle = angle + 1.0f;
+	
+	if (tick % 300 == 0)
+	{
+		printf("--Stanje programa:--\n");
+		printf("CAMPOS: %.1f/%.1f/%.1f \n",cam.pos.x, cam.pos.y, cam.pos.z);
+		printf("STATE: MULTIPLE VIEWPORTS %d / TEXTURELESS MODE %d / NO CLIP %d\nSTATE: DAY %d / SHOW BOUNDING BOXES %d / RENDER MODE %d\n\n",
+			MULTIPLE_VIEWPORTS,TEXTURELESS_MODE,DAY,NO_CLIP,SHOW_BOUNDARIES,RENDER_MODE);
+		printf("--------KRAJ--------\n");
+	}
 
-	angle = angle + 1;
-	rot_cam(pitch, yaw);
-	call_movement_func();
+	if (cam.pos.y < -50 && !NO_CLIP) {
+		cam.health = 0;
+		cam.pos.y = -50;
+	}
+
+	if (cam.health > 0)
+	{
+		cam_control(pitch, yaw);
+		mov_control(tick);
+	}
 
 	glutPostRedisplay();
-
-	//if (animation_ongoing)
 	glutTimerFunc(TIMER_INTERVAL, on_timer, TIMER_ID);
 }
 
 
 void on_reshape(int width, int height)
 {
-	/* Pamte se sirina i visina prozora. */
 	windowWidth = width;
 	windowHeight = height;
 }
@@ -109,141 +120,96 @@ void on_display(void)
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
-	glViewport(0, 0, windowWidth, windowHeight);
+	if (!MULTIPLE_VIEWPORTS)
+	{
+		glViewport(0, 0, windowWidth, windowHeight);
 
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(
-		75,
-		windowWidth / (float)windowHeight,
-		NEAR_PLANE, FAR_PLANE);
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluPerspective(
+			cam.fov,
+			windowWidth / (float)windowHeight,
+			NEAR_PLANE, FAR_PLANE);
 
-
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	adjust_camera();
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		if (cam.health > 0)
+			adjust_cam();
+		else if (cam.health <= 0)
+			death_cam();
 	
-	glColor3f(0.5, 0.5, 0.5);
-	glPushMatrix();
-//	glRotatef(angle, 0, 1, 0);
-	glPointSize(3);
+		
+		glPushMatrix();
+		set_scene();
+		glPopMatrix();
+		draw_ui(windowWidth, windowHeight);
+		glutSwapBuffers();
+	}
+	else if (MULTIPLE_VIEWPORTS)
+	{
+		glViewport(0, 0, windowWidth/2, windowHeight/2);
+		glLoadIdentity();
 
-	draw_loaded_obj();
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluPerspective(
+			cam.fov,
+			windowWidth / (float)windowHeight,
+			NEAR_PLANE, FAR_PLANE);
+
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		RENDER_MODE = 2;
+		if (cam.health > 0)
+			adjust_cam();
+		else if (cam.health <= 0)
+			death_cam();
+		set_scene();
+		draw_ui(windowWidth/2, windowHeight/2);
+
 	
+		glViewport(windowWidth / 2, windowHeight / 2, windowWidth, windowHeight);
+		glLoadIdentity();
 
+		glMatrixMode(GL_PROJECTION);
+		glLoadIdentity();
+		gluPerspective(
+			cam.fov,
+			windowWidth / (float)windowHeight,
+			NEAR_PLANE, FAR_PLANE);
 
-	glPopMatrix();
+		glMatrixMode(GL_MODELVIEW);
+		glLoadIdentity();
+		if (cam.health > 0)
+			adjust_cam();
+		else if (cam.health <= 0)
+			death_cam();
+		RENDER_MODE = 1;
+		draw_loaded_obj(angle,tick);
 
-	glLineWidth(3);
-	
-	glBegin(GL_LINES);
-		glColor3f(1, 0, 0);
-		glVertex3f(0, 0, 0);
-		glVertex3f(100, 0, 0);
-
-		glColor3f(0, 1, 0);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, 100, 0);
-
-		glColor3f(0, 0, 1);
-		glVertex3f(0, 0, 0);
-		glVertex3f(0, 0, 100);
-	glEnd();
-
-
-	//postavljamo matricu projekcije na ortogonalnu i iscrtavamo ui elemente
-	draw_ui();
-
-	glutSwapBuffers();
+		glutSwapBuffers();
+	}
 }
 
-
-void draw_ui()
+void set_scene()
 {
+	draw_light(angle);
+	draw_loaded_obj(angle,tick);
+	//draw_coordinate_system(); nije potrebno u finalnom programu
 	glPushMatrix();
-	glViewport(0, 0, windowWidth, windowHeight);
-	glMatrixMode(GL_PROJECTION);
-	
-	glLoadIdentity();
-	glOrtho(0,windowWidth, windowHeight, 0, 0, 1);
-	
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	glColor3f(1, 1, 1);
-	glLineWidth(1.0);
-	glPointSize(2);
-	
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-
-	//iscrtavanje kruznog nisana sa tackom u centru
-	glBegin(GL_POINTS);
-		glVertex2f((GLfloat)windowWidth / 2, (GLfloat)windowHeight / 2);
-	glEnd();
-
-	glBegin(GL_POLYGON);
-		int radius = 15;
-	
-		for (int i = 0; i <= 360.0f; i++)
-		{
-			float angle = 2.0f * (float)PI * (float)i / 360.0f;
-			float x = (float)cos(angle);
-			float y = (float)sin(angle);
-			glVertex2f(windowWidth/2+x*radius, windowHeight/2+y*radius);
-		}
-	glEnd();
-
-	
+	draw_skybox();
 	glPopMatrix();
 }
 
-void let_there_be_light() {
-
-	/* Pozicija svetla (u pitanju je direkcionalno svetlo). */
-	GLfloat light_position[] = { 100.0f, 100.0f, 100.0f, 0.0f };
-
-	/* Ambijentalna boja svetla. */
-	GLfloat light_ambient[] = { 0.2f, 0.2f, 0.2f, 1.0f };
-
-	/* Difuzna boja svetla. */
-	GLfloat light_diffuse[] = { 0.8f, 0.8f, 0.8f, 1.0f };
-
-	/* Spekularna boja svetla. */
-	GLfloat light_specular[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-
-	/* Koeficijenti ambijentalne refleksije materijala. */
-	GLfloat ambient_coeffs[] = { 0.3f, 0.3f, 0.3f, 1.0f };
-
-	/* Koeficijenti difuzne refleksije materijala. */
-	GLfloat diffuse_coeffs[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-
-	/* Koeficijenti spekularne refleksije materijala. */
-	GLfloat specular_coeffs[] = { 1.0f, 1.0f, 1.0f, 1.0f };
-
-	/* Koeficijent glatkosti materijala. */
-	GLfloat shininess = 0;
-
-	glEnable(GL_LIGHTING);
-	glEnable(GL_LIGHT0);
-
-	glLightfv(GL_LIGHT0, GL_POSITION, light_position);
-	glLightfv(GL_LIGHT0, GL_AMBIENT, light_ambient);
-	glLightfv(GL_LIGHT0, GL_DIFFUSE, light_diffuse);
-	glLightfv(GL_LIGHT0, GL_SPECULAR, light_specular);
-
-	/* Podesavaju se parametri materijala. */
-	glMaterialfv(GL_FRONT, GL_AMBIENT, ambient_coeffs);
-	glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse_coeffs);
-	glMaterialfv(GL_FRONT, GL_SPECULAR, specular_coeffs);
-	glMaterialf(GL_FRONT, GL_SHININESS, shininess);
-
+void set_callbacks()
+{
+	glutSpecialFunc(on_special_keyboard);
+	glutSpecialUpFunc(on_special_keyboard_up);
+	glutKeyboardFunc(on_keyboard);
+	glutKeyboardUpFunc(on_keyboard_up);
+	glutReshapeFunc(on_reshape);
+	glutDisplayFunc(on_display);
+	glutPassiveMotionFunc(on_mouse_mov);
+	glutMotionFunc(on_mouse_mov_and_click);
+	glutMouseFunc(on_mouse_click);
 }
-
-
-
-// glPolygonMode(face ,fill lines points);
-// glClipPlane(GL_CLIP_PLANE0,clip_plane);
-// 	glEnable(GL_CLIP_PLANE0);
-//glEnable(GL_COLOR_MATERIAL);
-//glColorMaterial(frontback,ambient diffuse etc);
-

@@ -3,7 +3,6 @@
 
 #include <GL/glut.h>
 
-
 typedef struct {
 	float x;
 	float y;
@@ -15,29 +14,14 @@ typedef struct {
 	float y;
 } Vec2;
 
-
-
 extern GLfloat vector_len(Vec3 v);
-
 extern Vec3 normalize_vec3(Vec3 v);
-
 extern Vec3 crossproduct(Vec3 v1, Vec3 v2);
-
 extern Vec3 add_vec(Vec3 v1, Vec3 v2);
-
 extern Vec3 mul_vec(Vec3 v1, Vec3 v2);
-
 extern Vec3 subs_vec(Vec3 v1, Vec3 v2);
-
 extern Vec3 add_vec_scalar(Vec3 v1, float i);
-
 extern Vec3 mul_vec_scalar(Vec3 v1, float i);
-
 extern Vec3 subs_vec_scalar(Vec3 v1, float i);
-
-
-
-
-
 
 #endif

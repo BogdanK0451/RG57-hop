@@ -16,19 +16,12 @@ extern ModelPaths modelPaths[];
 extern char *skyboxPaths[];
 
 extern Texture tex[];
-
 extern GLuint skybox[];
-
 extern int texNum;
 
 extern void load_skybox(char **path);
-
 extern void load_models(ModelPaths *modelPaths,char *mapPath);
-
 extern void load_texture(char *path);
-
 extern void load_all_files();
-
-
 
 #endif

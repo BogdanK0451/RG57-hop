@@ -3,25 +3,23 @@
 #include "vecops.h"
 #include <math.h>
 
-
+/*funkcije za vektorske operacije, mislim da nema potrebe sa dodatnim objasnjenjima*/
 
 GLfloat vector_len(Vec3 v)
 {
 	return (GLfloat)(sqrt(v.x*v.x + v.y*v.y + v.z*v.z));
 }
 
-
 Vec3 normalize_vec3(Vec3 v)
 {
 	Vec3 res;
 	float l = vector_len(v);
-	//if (l == 0.0f) return NULL_VECTOR;
 	res.x = v.x / l;
 	res.y = v.y / l;
 	res.z = v.z / l;
 	return res;
 }
-//potrebno radi izmene vektora koji se koristi za kretanje levo i desno
+
 Vec3 crossproduct(Vec3 v1, Vec3 v2)
 {
 	Vec3 resVector;
