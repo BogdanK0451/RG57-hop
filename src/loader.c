@@ -32,14 +32,14 @@
 
 	podrzani su tokeni tipa:
 	
-	vertex	v						v  x y z          
-	koordinate za teksture vt 		vt u v 
-	normala verteksa	vn			vn i j k
+	vertex	v			v  x y z          
+	koordinate za teksture vt 	vt u v 
+	normala verteksa vn	        vn i j k
 	faces/pljosni 
-	(face se moze sastojati iz		f v v v 
-	proizvoljnog br. verteksa <2)	f v/vt v/vt v/vt ili 
-									f v//vn v//vn v//vn ili 
-									f v/vt/vn v/vt/vn v/vt/vn
+	(face se moze sastojati iz	f v v v 
+	proizvoljnog br. verteksa >2)	f v/vt v/vt v/vt ili 
+					f v//vn v//vn v//vn ili 
+					f v/vt/vn v/vt/vn v/vt/vn
 
 	Pri unosu fajlova koji ne postuju ovaj format (neki fajlovi na internetu ne koriste ovu konkretnu notaciju) ponasanje je nedefinisano i moguce je da ce program puci)
 */
