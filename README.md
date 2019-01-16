@@ -17,9 +17,9 @@ F6 - smena dana i noci
 
 F5 - restart
 
-Page Up - ubrzavanje animacije iscrtavanja stormtroopera
+Page Up - ubrzavanje animacije iscrtavanja stormtroopera [primer](https://gyazo.com/8d072249e81f36c8f0ac08080903c25f)
 
-Page Down - usporavanje animacije i "deiscrtavanje" stormtroopera ako je vrednost <0
+Page Down - usporavanje animacije i "deiscrtavanje" stormtroopera ako je vrednost <0[primer](https://gyazo.com/40bd200643d8cfd8ce6145194a407388)
 
 WASD - kretanje i dijagonalno kretanje
  
@@ -58,6 +58,8 @@ sudo apt install gcc
 sudo apt install make
 sudo apt-get install binutils-gold freeglut3 freeglut3-dev 
 
+Kompajlirati sa komandom make u root-u projekta
+
 Da bi pomeranje kamere misem radilo normalno, program mora da se pokrene sa VMWWARE Workstation Pro-a ili native Ubuntu (ne Virtual box i ne Vmware Player) i u njemu (VMWARE Workstation pro-u) treba da se podesi edit>preferences>input>optimize mouse for games> always.
 U suprotnom ce mis imati ogroman sensitivity i jedina opcija ce biti kretanje kamere na strelice
 
@@ -75,11 +77,16 @@ https://www.youtube.com/watch?v=8p76pJsUP44
 Struktura direktorijuma programa je malo drugacija, za kompajliranju na windows-u iskoristiti program koji sam stavio u
 OpenGL.rar
 
+### Napomena
+U slucaju losih performansi moguce je izmeniti broj ucitanih objekata izmenom inicijalizacije  modelPaths promenljive u loader.c (mada u tom slucaju objekti nece biti dobro rasporedjeni po nivou jer su pozicije odredjene redom ucitavanja objekata)
+
+Default dimenzije prozora se mogu promeniti izmenom makro-a na vrhu input.h fajla
+
 ## Poznati problemi
 
-Ukoliko se igrac krece brzinom koja je veca od dimenzija objekta nece doci do kolizije.
+Ukoliko se igrac krece brzinom koja je veca od dimenzija objekta nece doci do kolizije
 
-Dijagonalna brzina kretanja veca od brzine kretanja pri drzanju samo W ili A ili S ili D.
+Dijagonalna brzina kretanja veca od brzine kretanja pri drzanju samo W ili A ili S ili D
 
 Teleportovanje radi samo ukoliko je kamera iznad horizonta 
 (kad je ispod odma dolazi do kolizije igraca i najblizeg bloka i nista se ne desava)

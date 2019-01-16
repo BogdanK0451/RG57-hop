@@ -22,7 +22,7 @@ int windowWidth, windowHeight;
 
 float angle = 0.0f;
 int seconds = 0;
-extern int tick = 0;
+int tick = 0;
 
 void on_reshape(int width, int height);
 void on_display(void);
@@ -100,7 +100,7 @@ void on_timer(int value)
 	if (cam.health > 0)
 	{
 		cam_control(pitch, yaw);
-		mov_control(tick);
+		mov_control();
 	}
 
 	glutPostRedisplay();
