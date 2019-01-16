@@ -46,6 +46,7 @@ Plavi krug oko nisana govori da je "jetpack" istrosen [primer](https://gyazo.com
 Crveni krug oko nisana govori da je je teleport i blink na cooldown-u od 5 sek [primer](https://gyazo.com/ae9c9c8d92ad44f0d73c8d08c2539232)
 ## Primeri rada
 https://streamable.com/q0rw5
+
 https://streamable.com/cyeps
 
 ## Setup
