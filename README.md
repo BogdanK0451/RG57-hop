@@ -51,7 +51,7 @@ https://streamable.com/cyeps
 
 ## Setup
 
-Za ubuntu:
+#### Za ubuntu:
 
 Instalirati gcc, make i glut
 sudo apt install gcc
@@ -67,15 +67,14 @@ U suprotnom ce mis imati ogroman sensitivity i jedina opcija ce biti kretanje ka
 mozda na vasoj tog problema nece biti. Na windowsu tog artifakta nema [primer](https://gyazo.com/e42b0237a4c03971c76a8568a321619c)**
 
 
-Za windows:
+#### Za windows:
 
-Na windowsu se program moze pokrenuti ili otvoriti kroz Visual Studio ukoliko su dostupni **glut i glew**
-tutorijal za "instalaciju"
+Na windowsu se program moze kompajlirati/pokrenuti kroz Visual Studio, ukoliko su dostupni **glut i glew .dll-ovi**
+tutorijal za "instalaciju" https://www.youtube.com/watch?v=8p76pJsUP44. Struktura direktorijuma programa je malo drugacija, za kompajliranju na windows-u iskoristiti datoteke koji sam stavio u "OpenGL.rar"
 
-https://www.youtube.com/watch?v=8p76pJsUP44
+.Exe za direktno pokretanje na Windows-u zajedno sa potrebnim dinamickim .dll-ovima se nalazi u rar file-u "Windows executable.rar"
 
-Struktura direktorijuma programa je malo drugacija, za kompajliranju na windows-u iskoristiti program koji sam stavio u
-OpenGL.rar
+
 
 ### Napomena
 U slucaju losih performansi moguce je izmeniti broj ucitanih objekata izmenom inicijalizacije  modelPaths promenljive u loader.c (mada u tom slucaju objekti nece biti dobro rasporedjeni po nivou jer su pozicije odredjene redom ucitavanja objekata)
