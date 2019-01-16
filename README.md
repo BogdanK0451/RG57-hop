@@ -72,7 +72,7 @@ mozda na vasoj tog problema nece biti. Na windowsu tog artifakta nema [primer](h
 Na windowsu se program moze kompajlirati/pokrenuti kroz Visual Studio, ukoliko su dostupni **glut i glew .dll-ovi**
 tutorijal za "instalaciju" https://www.youtube.com/watch?v=8p76pJsUP44. Struktura direktorijuma programa je malo drugacija, za kompajliranju na windows-u iskoristiti datoteke koji sam stavio u "OpenGL.rar"
 
-.Exe za direktno pokretanje na Windows-u zajedno sa potrebnim dinamickim .dll-ovima se nalazi u rar file-u "Windows executable.rar"
+.Exe za direktno pokretanje na Windows-u zajedno sa potrebnim .dll-ovima se nalazi u rar file-u "Windows executable.rar"
 
 
 
